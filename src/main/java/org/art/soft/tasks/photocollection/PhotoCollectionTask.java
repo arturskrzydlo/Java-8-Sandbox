@@ -1,5 +1,7 @@
 package org.art.soft.tasks.photocollection;
 
+import java.util.stream.Collectors;
+
 /**
  * Created by artur.skrzydlo on 2017-11-16.
  *
@@ -69,6 +71,10 @@ public class PhotoCollectionTask {
         stringBuilder.append("g.jpg, Warsaw, 2016-02-29 22:13:11\n");
 
         PhotoCollection photoCollection = new PhotoCollection(stringBuilder.toString());
-        System.out.println(photoCollection.organize());
+
+        System.out.println(photoCollection.organize().stream()
+                                          .map(photo -> photo.getName())
+                                          .collect(Collectors.joining("\n")));
+
     }
 }

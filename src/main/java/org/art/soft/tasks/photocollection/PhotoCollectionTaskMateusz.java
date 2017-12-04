@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PhotoCollectionTaskMateusz {
+public class PhotoCollectionTaskMateusz implements PhotoOrganize {
 
     public static void main(String[] args) throws Exception {
 
@@ -43,6 +43,10 @@ public class PhotoCollectionTaskMateusz {
         counter.computeIfPresent(e, (k, v) -> v + 1);
         counter.putIfAbsent(e, 1L);
         return e + counter.get(e);
+    }
+
+    @Override public List<org.art.soft.tasks.photocollection.Photo> organize() {
+        return null;
     }
 
     static class Photo {

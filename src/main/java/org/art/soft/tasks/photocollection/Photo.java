@@ -1,11 +1,12 @@
 package org.art.soft.tasks.photocollection;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Created by artur.skrzydlo on 2017-11-16.
  */
-class Photo {
+public class Photo {
 
     private String name;
     private String placeTaken;
@@ -42,10 +43,10 @@ class Photo {
     }
 
     @Override public String toString() {
-        return "Photo{" +
-                "name='" + name + '\'' +
-                ", placeTaken='" + placeTaken + '\'' +
-                ", dateOfCreation=" + dateOfCreation +
-                '}';
+        return
+                name + ',' +
+                        placeTaken + ',' +
+                        dateOfCreation.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+                ;
     }
 }

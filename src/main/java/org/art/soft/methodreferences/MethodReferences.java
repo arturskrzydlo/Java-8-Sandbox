@@ -1,7 +1,6 @@
 package org.art.soft.methodreferences;
 
-
-// Method references - can be ues to pass argument to:
+// Method references - can be used to pass argument to:
 //    - instance method
 //    - static method
 // or to be a target on which next operation will be called

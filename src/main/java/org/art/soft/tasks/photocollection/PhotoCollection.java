@@ -19,7 +19,7 @@ import static java.util.stream.Collectors.groupingBy;
 //Stream parallelizing  - use only when it's sense to use it - its faster - but you use more resource
 // While can be done with Stream iterate (with numeric values)
 
-public class PhotoCollection {
+public class PhotoCollection implements PhotoOrganize {
 
     private String photoCollectionString;
 
@@ -27,9 +27,7 @@ public class PhotoCollection {
         this.photoCollectionString = collection;
     }
 
-    public String organize() {
-
-        StringBuilder organizedPhotos = new StringBuilder();
+    public List<Photo> organize() {
 
 
         Map<String, List<Photo>> photosGroupedByCities = Arrays.stream(photoCollectionString.split("\n"))
@@ -38,19 +36,17 @@ public class PhotoCollection {
                                                                );
 
         // Do not create multilne lambdas ! It should be a glue, really easy to read code
-        photosGroupedByCities.values().stream()
-                             .map(PhotoCollection::changePhotosName)
-                             .flatMap(collection -> collection.stream())
-                             .sorted(Comparator.comparing(Photo::getDateOfCreation))
+        return photosGroupedByCities.values().stream()
+                                    .map(PhotoCollection::changePhotosName)
+                                    .flatMap(collection -> collection.stream())
+                                    .sorted(Comparator.comparing(Photo::getDateOfCreation))
 
-                            // Don't mutate elements in pipeline ! Just don't change shared variable, avoid shared mutability
-                            // use collect(toList()) or other safe thread method
-                             //.forEach(photo1 -> organizedPhotos.append(photo1.toString() + "\n"));
+                                    // Don't mutate elements in pipeline ! Just don't change shared variable, avoid shared mutability
+                                    // use collect(toList()) or other safe thread method
+                                    //.forEach(photo1 -> organizedPhotos.append(photo1.toString() + "\n"));
 
-                            .map(photo -> photo.toString())
-                            .collect(Collectors.joining("\n"));
+                                    .collect(Collectors.toList());
 
-        return organizedPhotos.toString();
     }
 
     private static Photo createPhotoFromString(String photo) {
