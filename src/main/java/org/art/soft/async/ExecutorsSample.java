@@ -9,8 +9,8 @@ public class ExecutorsSample {
 
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 
-        Executor executor = Executors.newSingleThreadExecutor();
-        executor.execute(() -> System.out.println("Hello World"));
+/*        Executor executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> System.out.println("Hello World"));*/
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
 
@@ -19,7 +19,17 @@ public class ExecutorsSample {
         List<Future<String>> futures = someIntegers.stream()
                                                    .map(it -> executorService.submit(ExecutorsSample::call))
                                                    .collect(Collectors.toList());
-        TimeUnit.SECONDS.sleep(15);
+
+        executorService.shutdown();
+        try {
+            if (!executorService.awaitTermination(5000, TimeUnit.MILLISECONDS)) {
+                executorService.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executorService.shutdownNow();
+        }
+
+        TimeUnit.SECONDS.sleep(8);
 
         futures.stream().forEach(future -> {
             try {
@@ -30,6 +40,7 @@ public class ExecutorsSample {
                 e.printStackTrace();
             }
         });
+
     }
 
     private static String call() {
