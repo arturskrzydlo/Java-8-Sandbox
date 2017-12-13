@@ -1,9 +1,9 @@
 package org.art.soft.async;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ExecutorsSample {
 
@@ -14,11 +14,9 @@ public class ExecutorsSample {
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
 
-        List<Integer> someIntegers = Arrays.asList(1, 2, 3, 4, 5);
-
-        List<Future<String>> futures = someIntegers.stream()
-                                                   .map(it -> executorService.submit(ExecutorsSample::call))
-                                                   .collect(Collectors.toList());
+        List<Future<String>> futures = Stream.generate(() -> executorService.submit(ExecutorsSample::call))
+                                             .limit(5)
+                                             .collect(Collectors.toList());
 
         executorService.shutdown();
         try {
@@ -40,6 +38,12 @@ public class ExecutorsSample {
                 e.printStackTrace();
             }
         });
+
+        ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+        scheduledExecutorService.scheduleAtFixedRate(() -> System.out.println("Multithreading rulezz !"), 100, 1000,
+                TimeUnit.MILLISECONDS);
+
+
 
     }
 
